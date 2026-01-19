@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teleskop Jamesa Webba - Odkrycia i Galeria</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #0a0e27;
+            --secondary-bg: #1a1f3a;
+            --text-color: #ffffff;
+            --accent-color: #a8d0ff;
+            --hover-color: #c5e0ff;
+            --border-color: #2d3555;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--primary-bg);
+            font-size: 16px;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #8fc4ff;
+            color: #0a0e27;
+            padding: 8px 16px;
+            text-decoration: none;
+            z-index: 100;
+            font-weight: bold;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        header {
+            background-color: var(--secondary-bg);
+            border-bottom: 3px solid var(--accent-color);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            position: relative;
+            height: 140px;
+            overflow: hidden;
+        }
+
+        .header-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0.4;
+        }
+
+        .header-overlay {
+            position: relative;
+            z-index: 2;
+            padding: 1rem 0;
+            background: #0a0e27;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        nav {
+            margin-top: 0;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: block;
+            background-color: #1a1f3a;
+            border: 2px solid #8fc4ff;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            background-color: #8fc4ff;
+            border-color: #a8d0ff;
+            color: #0a0e27;
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        nav a.active {
+            background-color: #8fc4ff;
+            border-color: #a8d0ff;
+            color: #0a0e27;
+        }
+
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 300px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #a8d0ff;
+            border-bottom: 2px solid #a8d0ff;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #c5e0ff;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .discovery-card {
+            background-color: var(--secondary-bg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #a8d0ff;
+            border-radius: 4px;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .discovery-card.no-image {
+            grid-template-columns: 1fr;
+        }
+
+        .discovery-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid var(--border-color);
+        }
+
+        .discovery-content {
+            flex: 1;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            background-color: var(--secondary-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .gallery-item:hover,
+        .gallery-item:focus-within {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-caption {
+            padding: 1rem;
+        }
+
+        .gallery-caption h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .contact-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card {
+            background-color: var(--secondary-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+        }
+
+        .contact-card h3 {
+            margin-top: 0;
+            color: #a8d0ff;
+        }
+
+        .contact-info {
+            margin-top: 1rem;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-info strong {
+            display: inline-block;
+            min-width: 100px;
+            color: #c5e0ff;
+        }
+
+        .contact-info a {
+            color: #c5e0ff;
+            text-decoration: underline;
+        }
+
+        .contact-info a:hover,
+        .contact-info a:focus {
+            color: var(--text-color);
+        }
+
+        footer {
+            background-color: var(--secondary-bg);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 3px solid var(--accent-color);
+            text-align: center;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus {
+            outline: 3px solid #7db3f5;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .header-content {
+                height: 180px;
+            }
+
+            .header-image {
+                height: 180px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            nav a {
+                text-align: center;
+            }
+
+            .discovery-card {
+                grid-template-columns: 1fr;
+            }
+
+            .discovery-image {
+                height: 200px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Przejdź do treści głównej</a>
+
+    <header role="banner">
+        <div class="header-content">
+            <img src="https://images.unsplash.com/photo-1506443432602-ac2fcd6f54e0?w=1200&q=80" 
+                 alt="Teleskop naziemny na tle gwieździstego nocnego nieba z Drogą Mleczną" 
+                 class="header-image">
+            <div class="header-overlay">
+                <div class="container">
+                    <h1>Teleskop Kosmiczny Jamesa Webba</h1>
+                    <nav role="navigation" aria-label="Nawigacja główna">
+                        <ul>
+                            <li><a href="#" data-page="home" class="nav-link active" aria-current="page">Strona Główna</a></li>
+                            <li><a href="#" data-page="discoveries" class="nav-link">Odkrycia</a></li>
+                            <li><a href="#" data-page="gallery" class="nav-link">Galeria</a></li>
+                            <li><a href="#" data-page="contact" class="nav-link">Kontakt</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="main-content" role="main">
+        <div class="container">
+            <!-- Strona Główna -->
+            <section id="home" class="page active" aria-labelledby="home-heading">
+                <h2 id="home-heading">Witamy na mojej stronie</h2>
+                
+                <p>Teleskop Kosmiczny Jamesa Webba (JWST) to najbardziej zaawansowany teleskop kosmiczny kiedykolwiek zbudowany przez ludzkość. Wystrzelony 25 grudnia 2021 roku, rewolucjonizuje nasze rozumienie wszechświata.</p>
+
+                <h3>O Teleskopie</h3>
+                <p>JWST to wspólny projekt NASA, Europejskiej Agencji Kosmicznej (ESA) oraz Kanadyjskiej Agencji Kosmicznej (CSA). Teleskop obserwuje wszechświat w podczerwieni, co pozwala mu "widzieć" przez pyłowe obłoki i obserwować najstarsze galaktyki.</p>
+
+                <div class="discovery-card no-image">
+                    <div class="discovery-content">
+                        <h3>Kluczowe Parametry</h3>
+                        <p><strong>Średnica zwierciadła głównego:</strong> 6,5 metra</p>
+                        <p><strong>Lokalizacja:</strong> Punkt Lagrange'a L2 (1,5 miliona km od Ziemi)</p>
+                        <p><strong>Masa:</strong> około 6 500 kg</p>
+                        <p><strong>Zakres spektralny:</strong> 0,6 - 28,5 mikrometra (podczerwień)</p>
+                    </div>
+                </div>
+
+                <h3>Misja</h3>
+                <p>Główne cele naukowe teleskopu Webb obejmują badanie formowania się pierwszych gwiazd i galaktyk po Wielkim Wybuchu, ewolucję galaktyk, narodziny gwiazd i planet oraz badanie egzoplanet i możliwości życia poza Ziemią.</p>
+            </section>
+
+            <!-- Strona Odkrycia -->
+            <section id="discoveries" class="page" aria-labelledby="discoveries-heading">
+                <h2 id="discoveries-heading">Najważniejsze Odkrycia</h2>
+
+                <div class="discovery-card">
+                    <img src="https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=400&q=80" 
+                         alt="Odległe galaktyki z wczesnego wszechświata widoczne jako małe punkty świetlne" 
+                         class="discovery-image">
+                    <div class="discovery-content">
+                        <h3>1. Najstarsze Galaktyki we Wszechświecie</h3>
+                        <p>Webb odkrył galaktyki powstałe zaledwie 300-400 milionów lat po Wielkim Wybuchu. Te obserwacje rewolucjonizują nasze rozumienie wczesnego wszechświata i pokazują, że galaktyki formowały się szybciej niż wcześniej sądzono.</p>
+                    </div>
+                </div>
+
+                <div class="discovery-card">
+                    <img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=400&q=80" 
+                         alt="Gazowa planeta z widoczną atmosferą na tle gwiazd" 
+                         class="discovery-image">
+                    <div class="discovery-content">
+                        <h3>2. Atmosfery Egzoplanet</h3>
+                        <p>Teleskop po raz pierwszy wykrył obecność dwutlenku węgla w atmosferze egzoplanety WASP-39 b. To przełomowe odkrycie otwiera nowe możliwości w poszukiwaniu biomarkerów i potencjalnego życia poza Układem Słonecznym.</p>
+                    </div>
+                </div>
+
+                <div class="discovery-card">
+                    <img src="https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=400&q=80" 
+                         alt="Mgławica planetarna z kolorowymi pierścieniami gazu wokół gwiazdy" 
+                         class="discovery-image">
+                    <div class="discovery-content">
+                        <h3>3. Mgławica Południowego Pierścienia</h3>
+                        <p>Webb ujawnił niesamowite szczegóły Mgławicy Południowego Pierścienia, pokazując dwie gwiazdy centralne zamiast jednej. Odkrycie to pomaga zrozumieć końcowe etapy życia gwiazd podobnych do Słońca.</p>
+                    </div>
+                </div>
+
+                <div class="discovery-card">
+                    <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&q=80" 
+                         alt="Region formowania gwiazd z jasnymi obszarami narodzin nowych gwiazd" 
+                         class="discovery-image">
+                    <div class="discovery-content">
+                        <h3>4. Formowanie się Gwiazd</h3>
+                        <p>Obserwacje regionów formowania gwiazd, takich jak Mgławica Carina, ujawniły setki młodych gwiazd i narodzających się układów planetarnych, które były wcześniej ukryte za pyłem kosmicznym.</p>
+                    </div>
+                </div>
+
+                <div class="discovery-card">
+                    <img src="https://images.unsplash.com/photo-1614314107768-6018061b5b72?w=400&q=80" 
+                         alt="Planeta Neptun z widocznymi pierścieniami i niebieską atmosferą" 
+                         class="discovery-image">
+                    <div class="discovery-content">
+                        <h3>5. Pierścienie Neptuna</h3>
+                        <p>Webb zrobił najwyraźniejsze zdjęcia pierścieni Neptuna od czasu przelotu sondy Voyager 2 w 1989 roku, ujawniając nowe szczegóły tej lodowej planety-olbrzyma i jej systemu.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Galeria -->
+            <section id="gallery" class="page" aria-labelledby="gallery-heading">
+                <h2 id="gallery-heading">Galeria Zdjęć z Teleskopu Webb</h2>
+
+                <div class="gallery">
+                    <article class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&q=80" 
+                             alt="Kolorowa mgławica z jasnymi gwiazdami i gazowymi obłokami w odcieniach czerwieni i niebieskiego">
+                        <div class="gallery-caption">
+                            <h3>Mgławica Carina</h3>
+                            <p>Region formowania gwiazd odległy o 7 600 lat świetlnych, ukazujący "kosmiczne klify" i narodziny młodych gwiazd.</p>
+                        </div>
+                    </article>
+
+                    <article class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&q=80" 
+                             alt="Grupa galaktyk w głębokiej przestrzeni kosmicznej z tysiącami punktów świetlnych">
+                        <div class="gallery-caption">
+                            <h3>Głębokie Pole JWST</h3>
+                            <p>Najgłębszy i najostrzejszy obraz odległego wszechświata, pokazujący galaktyki sprzed 13 miliardów lat.</p>
+                        </div>
+                    </article>
+
+                    <article class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&q=80" 
+                             alt="Spiralna galaktyka z jasnymi ramionami spiralnymi i centralnym jądrem">
+                        <div class="gallery-caption">
+                            <h3>Galaktyka Koło Wozu</h3>
+                            <p>Pierścieniowa galaktyka powstała w wyniku zderzenia dwóch galaktyk około 400 milionów lat temu.</p>
+                        </div>
+                    </article>
+
+                    <article class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=800&q=80" 
+                             alt="Mgławica planetarna z symetrycznymi strukturami gazowymi w kształcie motyla">
+                        <div class="gallery-caption">
+                            <h3>Mgławica Południowego Pierścienia</h3>
+                            <p>Mgławica planetarna odkrywająca podwójny system gwiezdny w swoim centrum.</p>
+                        </div>
+                    </article>
+
+                    <article class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=800&q=80" 
+                             alt="Grupa zwartych galaktyk oddziałujących grawitacyjnie ze sobą">
+                        <div class="gallery-caption">
+                            <h3>Kwintet Stephana</h3>
+                            <p>Grupa pięciu galaktyk pokazująca ich grawitacyjne oddziaływania i fale uderzeniowe.</p>
+                        </div>
+                    </article>
+
+                    <article class="gallery-item">
+                        <img src="https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=800&q=80" 
+                             alt="Planeta lodowy olbrzym z widocznymi pierścieniami i księżycami">
+                        <div class="gallery-caption">
+                            <h3>Neptun i Jego Pierścienie</h3>
+                            <p>Najwyraźniejsze zdjęcie pierścieni Neptuna od 30 lat, wraz z 7 z 14 księżyców planety.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Kontakt -->
+            <section id="contact" class="page" aria-labelledby="contact-heading">
+                <h2 id="contact-heading">Dane Kontaktowe</h2>
+
+                <div class="contact-section">
+                    <article class="contact-card">
+                        <h3>NASA (National Aeronautics and Space Administration)</h3>
+                        <div class="contact-info">
+                            <p><strong>Adres:</strong> 300 E Street SW, Suite 5R30, Washington, DC 20546, USA</p>
+                            <p><strong>Telefon:</strong> +1 (202) 358-0001</p>
+                            <p><strong>Email:</strong> <a href="mailto:public-inquiries@nasa.gov">public-inquiries@nasa.gov</a></p>
+                            <p><strong>Strona WWW:</strong> <a href="https://www.nasa.gov" target="_blank" rel="noopener noreferrer">www.nasa.gov</a></p>
+                            <p><strong>Webb:</strong> <a href="https://www.jwst.nasa.gov" target="_blank" rel="noopener noreferrer">www.jwst.nasa.gov</a></p>
+                        </div>
+                    </article>
+
+                    <article class="contact-card">
+                        <h3>ESA (European Space Agency)</h3>
+                        <div class="contact-info">
+                            <p><strong>Adres:</strong> 24 Rue du Général Bertrand, CS 30798, 75345 Paris Cedex 07, France</p>
+                            <p><strong>Telefon:</strong> +33 (0)1 53 69 76 54</p>
+                            <p><strong>Email:</strong> <a href="mailto:contact@esa.int">contact@esa.int</a></p>
+                            <p><strong>Strona WWW:</strong> <a href="https://www.esa.int" target="_blank" rel="noopener noreferrer">www.esa.int</a></p>
+                            <p><strong>Webb:</strong> <a href="https://www.esa.int/webb" target="_blank" rel="noopener noreferrer">www.esa.int/webb</a></p>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="discovery-card no-image" style="margin-top: 2rem;">
+                    <div class="discovery-content">
+                        <h3>Biuro ESA w Polsce</h3>
+                        <div class="contact-info">
+                            <p><strong>Adres:</strong> Polska Agencja Kosmiczna, ul. Wspólna 1/3, 00-529 Warszawa</p>
+                            <p><strong>Strona WWW:</strong> <a href="https://www.polsa.gov.pl" target="_blank" rel="noopener noreferrer">www.polsa.gov.pl</a></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer role="contentinfo">
+        <div class="container">
+            <p><strong>Teleskop Kosmiczny Jamesa Webba</strong></p>
+            <p>Projekt NASA, ESA i CSA | Strona edukacyjna</p>
+            <p>&copy; 2025 - Wszelkie prawa zastrzeżone</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pages = document.querySelectorAll('.page');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetPage = this.getAttribute('data-page');
+                    
+                    navLinks.forEach(l => {
+                        l.classList.remove('active');
+                        l.removeAttribute('aria-current');
+                    });
+                    
+                    pages.forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    this.setAttribute('aria-current', 'page');
+                    
+                    const activePage = document.getElementById(targetPage);
+                    activePage.classList.add('active');
+                    
+                    document.getElementById('main-content').focus();
+                    
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#main-content') {
+                        e.preventDefault();
+                        document.getElementById('main-content').focus();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
